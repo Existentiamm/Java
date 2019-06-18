@@ -1,0 +1,365 @@
+package lab3;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+public class Parking {
+    private String name; 
+    private List<Car>cars;
+    private int capacity; 
+
+    public Parking() {
+        this.name = "brak";
+        this.cars = new ArrayList<Car>();
+        this.capacity = 0;
+    }
+
+    public Parking(List<Car> cars) {
+        this.cars = cars;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void carEnter(Car car){
+        if(cars.size()>= capacity){
+            System.out.println("Parking is full");}
+        else {
+        cars.add(car);}
+    }
+    
+   public Car carLeave(String registrationNumber){
+       Car car = cars.stream()  
+               .filter(lambda-> lambda.getRegistrationNumber().equals(registrationNumber))
+               .findFirst()
+               .get();
+                    
+       if(car == null) {
+           System.out.println("Auto nie istnieje");}
+       else {cars.remove(car);
+       
+       }    
+       return car;
+}
+  
+    
+    @Override
+    public String toString() {
+        String str = String.format("Parking %s, Capacity: %d, Cars count: %d \r\n CARS: \r\n", name, capacity, cars.size());
+        for(Car car: cars){
+            str = str + car +"\r\n";
+        }
+        return  str;
+    }
+    
+    public void details() {
+        System.out.println(toString());}
+   
+   
+}//KONIEC KLASY PARKING
+
+package lab3;
+
+public class Car {
+    private String brand; 
+    private String model; 
+    private int doorCount; 
+    private float engineVolume; 
+    private double avgConsump; 
+    private String registrationNumber; 
+    private static int carCount; 
+
+    public Car() {
+        this.brand = "brak";
+        this.model = "brak";
+        this.doorCount = 0;
+        this.engineVolume = 0;
+        this.avgConsump = 0;
+        this.registrationNumber = "brak";
+        carCount++;
+    }
+
+    public Car(String brand, String model, int doorCount, float engineVolume, double avgConsump, String registrationNumber) {
+        this.brand = brand;
+        this.model = model;
+        this.doorCount = doorCount;
+        this.engineVolume = engineVolume;
+        this.avgConsump = avgConsump;
+        this.registrationNumber = registrationNumber;
+        carCount++;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getDoorCount() {
+        return doorCount;
+    }
+
+    public void setDoorCount(int doorCount) {
+        this.doorCount = doorCount;
+    }
+
+    public float getEngineVolume() {
+        return engineVolume;
+    }
+
+    public void setEngineVolume(float engineVolume) {
+        this.engineVolume = engineVolume;
+    }
+
+    public double getAvgConsump() {
+        return avgConsump;
+    }
+
+    public void setAngConsump(double avgConsump) {
+        this.avgConsump = avgConsump;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    @Override
+    public String toString() {
+        String str = String.format("Brand: %s, Model: %s, DoorCount: %s, EngineVolume: %s, AvgConmupt: %s, RegistrationNumber: %s ",brand ,
+                model,doorCount,engineVolume,avgConsump,registrationNumber);
+        return str;
+    }
+    
+    public double calculateConsump(double roadLength){
+    return (roadLength* avgConsump)/100.00 ;}
+    
+    public double calculateCost(double roadLength, double petrolCost){
+    return (calculateConsump(roadLength) * petrolCost);}
+    
+    public void details(){
+        System.out.println(toString());}
+    
+    public static void displayCarCount(){
+        System.out.println(carCount);}
+
+    @Override
+    protected Car clone() throws CloneNotSupportedException {
+        try{
+        return (Car)super.clone();
+        } catch(CloneNotSupportedException e) {
+            return new Car(this.brand, this.model, this.doorCount, this.engineVolume, this.avgConsump, this.registrationNumber );
+        }
+         
+    }
+    
+    
+    
+}//KONIEC KLASY CAR 
+
+package lab3;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Building {
+    private List<Apartment> apartments;
+    private String address; 
+
+    public Building() {
+        this.address = "brak";
+        this.apartments = new ArrayList<>();
+    }
+
+    public Building(String address) {
+        this.address = address;
+        this.apartments = new ArrayList<>();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        String str = String.format("BUILDING Adres: %s, apartament: \r\n",address );
+        for(Apartment apartment : this.apartments){
+        str = str + apartment  + "\r\n";
+        }
+        return str;
+    }
+    
+    public void createApartment(Apartment apartment){
+        apartments.add(apartment);
+    }
+
+    public void destroyApartment(int ApartmentNumber){
+        Apartment apartment = apartments.stream()
+                .filter(lambda -> lambda.equals(ApartmentNumber))
+                .findFirst()
+                .get();
+        if(apartment == null) {
+            System.out.println("Nie ma nic do usuniecia");
+        }
+        else {
+        apartments.remove(apartment);
+        }
+    }
+    
+    public void details(){
+        System.out.println(toString());}
+    
+    
+}// KONIEC KLASY BUILDING
+
+package lab3;
+
+public class Apartment {
+    private int number; 
+    private float area; 
+    private int numberOfRooms; 
+    private  boolean balcony; 
+    private int level; 
+
+    public Apartment() {
+        this.number = 0;
+        this.area = 0;
+        this.numberOfRooms = 0;
+        this.balcony = balcony;
+        this.level = 0;
+    }
+
+    public Apartment(int number, float area, int numberOfRooms, boolean balcony, int level) {
+        this.number = number;
+        this.area = area;
+        this.numberOfRooms = numberOfRooms;
+        this.balcony = balcony;
+        this.level = level;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public float getArea() {
+        return area;
+    }
+
+    public void setArea(float area) {
+        this.area = area;
+    }
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public boolean isBalcony() {
+        return balcony;
+    }
+
+    public void setBalcony(boolean balcony) {
+        this.balcony = balcony;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        String str = String.format("APARTMENT Number: %d, Area: %f, NumberOfRooms: %d, Balcony: %b, Level: %d \r\n", number, area, numberOfRooms, balcony, level);
+        return str;
+    }
+    
+    public void details(){
+        System.out.println(toString());}
+    
+    
+    
+    
+    
+}//KONIEC KLASY APARTMENT
+
+
+package lab3;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Lab3 {
+
+    
+    public static void main(String[] args) {
+        
+        System.out.println("============================================");
+ System.err.println("");
+ List<Car> cars = new ArrayList<>();
+ cars.add(new Car("Syrena", "105", 2, 0.8f, 7.6d, "WE1234"));
+ cars.add(new Car("AUDI", "A4", 4, 1.9f, 7.6d, "SC1234"));
+ cars.add(new Car("Renault", "Clio", 5, 1.4f, 4.6d, "WW1234"));
+ Parking parking = new Parking(cars);
+ Car car = parking.carLeave("WW1234");
+ parking.details();
+ car.setRegistrationNumber("AA543321");
+ parking.carEnter(car);
+ parking.details();
+ Apartment ap1 = new Apartment(1, 40, 3, true, 1);
+ Apartment ap2 = new Apartment(2, 60, 5, true, 1);
+ Apartment ap3 = new Apartment(3, 50, 4, false, 2);
+ Building building = new Building("Armii Krajowej 36");
+ building.createApartment(ap1);
+ building.createApartment(ap2);
+ building.createApartment(ap3);
+ building.details();
+
+ 
+    }
+    
+}
