@@ -1,0 +1,388 @@
+package lab1;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+
+public class Person {
+    private static int maxCarCount;
+    private String firstName; 
+    private String lastName; 
+    private List<String> registrationNumbers; 
+
+    public Person() {
+       this.firstName = firstName; 
+       this.lastName = lastName; 
+       this.registrationNumbers = new ArrayList<>(); 
+    }
+
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.registrationNumbers = new ArrayList<>();
+        
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public List<String> getRegistrationNumber() {
+        return registrationNumbers;
+    }
+
+    public static int getMaxCarCount() {
+        return maxCarCount;
+    }
+
+    public static void setMaxCarCount(int maxCarCount) {
+        Person.maxCarCount = maxCarCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" + "firstName=" + firstName + ", lastName=" + lastName + ", registrationNumbers=" + registrationNumbers + '}';
+    }
+    
+    public void details() {
+        System.out.println(toString());
+    }
+     
+    public void addCarRegistrationNumber(String registationNumber){
+        if (this.registrationNumbers.size() >= getMaxCarCount() ) {
+             System.out.println("Nie mozna dodac wiecej numerow rejestracyjnych");
+        }
+        else {
+            registrationNumbers.add(registationNumber);
+                System.out.println(String.format("Dodano numer rejestracyjny %s", registationNumber));
+        }
+    }
+    
+    public void removeCarRegistrationNumber(String registationNumber){
+        try{
+        String regNumber = this.registrationNumbers
+                .stream()
+                .filter(lambda->lambda.equals(registationNumber))
+                .findFirst()
+                .get();
+                } catch(NoSuchElementException x) {
+                  System.out.println("Nie ma nic do usuniecia");
+                }
+        registrationNumbers.remove(registationNumber);
+                
+     }
+    
+ }KONIEC KLASY PERSON
+ 
+ package lab1;
+import lab1.Car;
+
+public class Garage  implements Cloneable  {
+    private Car[] cars;
+    private String address; 
+    private int capacity; 
+
+    public Garage() {
+        this.cars = new Car[capacity];
+        this.address = address; 
+        this.capacity = capacity; 
+    }
+
+    public Garage(String address, int capacity) {
+        this.address = address;
+        this.capacity = capacity;
+        this.cars = new Car[capacity];
+    }
+
+    public Car[] getCars() {
+        return cars;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+        this.cars = new Car[capacity];
+    }
+    
+    public int carsCount(){
+    int index=0; int count=0; 
+    while (index < cars.length){
+        if (cars[index] != null)
+             count++; 
+                 index++; 
+         }
+       return count;
+    }
+    
+    public void carEnter(Car car){
+     if (carsCount() >= capacity )
+         System.out.println (String.format("Nie mozna zaparkować auta w garazu, pod adresem %s jest pełny \r\n ****************************", address ));
+     else {
+         int index=0;
+         while (cars[index] != null) {
+             index++;
+         }
+            cars[index] = car;
+     }
+         }
+    public Car carLeave() {
+        if (carsCount() == 0) {
+            System.out.println("There is no cars to leave.");
+            return null;
+        } else {
+            Car car = cars[carsCount() - 1];
+            cars[carsCount() - 1] = null;
+            return car;
+        }
+    }
+
+    @Override
+    public String toString() {
+        String str = String.format("\r\n Adres garazu : %s, Pojemnosc garazu %d, Ilosc aut %s \r\n Auta \r\n" ,address, capacity, carsCount());
+        for(Car car: cars){
+            str= str+car+ "\n";
+        }
+        
+        return str;
+    }
+
+    public void details(){
+        System.out.println(toString());
+    }
+    @Override
+    protected Garage clone() throws CloneNotSupportedException {
+        try {
+        return (Garage)super.clone();
+        }
+        catch(CloneNotSupportedException e){
+            Garage garage = new Garage(); 
+            garage.address = this.getAddress(); 
+            garage.capacity = this.getCapacity(); 
+            Car[] cars= this.getCars();
+            garage.cars = new Car[cars.length];
+            System.arraycopy(cars, 0, garage.cars, 0, cars.length);
+            return garage;
+        }
+    }
+    
+    
+    
+}//KONIEC KLASY GARAGE 
+ 
+ package lab1;
+
+public class Car  implements Cloneable {
+    
+    private String brand;
+    private String model; 
+    private int doorCount; 
+    private float engineVolume; 
+    private double avgConsump; 
+    private String registrationNumber; 
+    private static int carCount;
+
+    public Car() {
+        this.brand = "none";
+        this.model = "none"; 
+        this.doorCount = 0;
+        this.engineVolume = 0;
+        this.avgConsump = 0; 
+        this.registrationNumber = "none";
+        carCount++; 
+     }
+
+    public Car(String brand, String model, int doorCount, float engineVolume, double avgConsump, String registrationNumber) {
+        this.brand = brand;
+        this.model = model;
+        this.doorCount = doorCount;
+        this.engineVolume = engineVolume;
+        this.avgConsump = avgConsump;
+        this.registrationNumber = registrationNumber;
+        carCount++; 
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getDoorCount() {
+        return doorCount;
+    }
+
+    public void setDoorCount(int doorCount) {
+        this.doorCount = doorCount;
+    }
+
+    public float getEngineVolume() {
+        return engineVolume;
+    }
+
+    public void setEngineVolume(float engineVolume) {
+        this.engineVolume = engineVolume;
+    }
+
+    public double getAvgConsump() {
+        return avgConsump;
+    }
+
+    public void setAvgConsump(double avgConsump) {
+        this.avgConsump = avgConsump;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" + "brand=" + brand + ", model=" + model + ", doorCount=" + doorCount + ", engineVolume=" + engineVolume + ", avgConsump=" + avgConsump + ", registrationNumber=" + registrationNumber + '}';
+    }
+    
+    public double calculateConsump(double roadLength){
+        return (roadLength * avgConsump)/100.0;
+    }
+    
+    public double calculateCost(double roadLength, double petrolCost){
+    return (calculateConsump(roadLength)* petrolCost);}
+    
+    
+    public void details(){
+    System.out.println(toString());}
+    
+    public static void displayCarCount(){
+    System.out.println(String.format("Ilosc aut %d ",carCount));}
+
+    @Override
+    public  Car clone() throws CloneNotSupportedException {
+        try {
+        return (Car) super.clone(); 
+        }
+        catch (CloneNotSupportedException e) {
+        return new Car(this.brand,
+        this.model,
+        this.doorCount ,
+        this.engineVolume ,
+        this.avgConsump ,
+        this.registrationNumber) ;}
+    }
+    
+    
+}//KONIEC KLASY CAR 
+
+
+
+package lab1;
+
+public class Lab1 {
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+       Car car1 = new Car();
+car1.details();
+car1.setBrand("Fiat");
+car1.setModel("126p");
+car1.setDoorCount(2);
+car1.setEngineVolume(650);
+car1.setAvgConsump(6.0);
+car1.setRegistrationNumber("KR12345");
+car1.details();
+Car car2 = new Car("Syrena", "105", 2, 0.8f, 7.6d, "WE1234");
+System.out.println(car2);
+double routeConsumption = car2.calculateConsump(500);
+System.out.println(String.format("Route consumption: %f l", routeConsumption));
+double routeCost = car2.calculateCost(500, 5);
+System.out.println(String.format("Route cost: %f", routeCost));
+Car.displayCarCount();
+System.out.println("==================Copy References Example ==========================");
+Car car3 = car2;
+car3.details();
+car3.setModel("OPEL");
+ car3.details();
+ car2.details();
+System.out.println("==================Copy objects Example ==========================");
+Car car4 = car2.clone();
+car4.setModel("AUDI");
+car2.details();
+car4.details();
+ System.out.println("================== GARAGE ==========================");
+Garage garage1 = new Garage();
+garage1.setAddress("ul. Garażowa 1");
+garage1.setCapacity(1);
+garage1.carEnter(car4);
+garage1.details();
+Garage garage2 = new Garage("ul. Garażowa 2", 2);
+garage2.carEnter(car1);
+garage2.carEnter(car2);
+garage2.details();
+Car movedCar = garage1.carLeave();
+garage2.carEnter(movedCar);
+String address = garage2.getAddress();
+Car[] cars = garage2.getCars();
+garage1.details();
+garage2.details();
+System.out.println("==================Copy References Example with array field ==========================");
+Garage garage4 = garage2.clone();
+garage4.carEnter(car4);
+garage2.details();
+garage4.details();
+System.out.println("================== Class with list field ==========================");
+Person.setMaxCarCount(2);
+Person person1 = new Person();
+person1.setFirstName("Jan");
+person1.setLastName("Kowalski");
+person1.addCarRegistrationNumber("SCZ 12345");
+person1.addCarRegistrationNumber("SC 9863");
+person1.addCarRegistrationNumber("SCZ 37893");
+person1.addCarRegistrationNumber("SCZ 4912");
+person1.details();
+Person person2 = new Person("Piotr", "Nowak");
+person2.details();
+person2.addCarRegistrationNumber("DW 9866");
+person2.details();
+person2.removeCarRegistrationNumber("DW 9866");
+person2.details();
+person2.removeCarRegistrationNumber("DW 9866");
+person2.details();
+    }
+    
+}
+
+ 
