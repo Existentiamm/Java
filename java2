@@ -1,0 +1,378 @@
+package lab2;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
+public class Student extends Person {
+
+    private int year;
+    private int group;
+    private int indexId;
+    private List<Grade> grades;
+
+    public Student() {
+        super();
+        this.year = 0;
+        this.group = 0;
+        this.indexId = 0;
+        this.grades = new ArrayList<Grade>();
+    }
+
+    public Student(String firstName, String lastName, Date dateOfBirth, int year, int group, int indexId) {
+        super(firstName, lastName, dateOfBirth);
+        this.year = year;
+        this.group = group;
+        this.indexId = indexId;
+        this.grades = new ArrayList<Grade>();
+
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public int getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(int indexId) {
+        this.indexId = indexId;
+    }
+
+    public void setGrades(List<Grade> grades) {
+        this.grades = grades;
+    }
+
+    @Override
+    public String toString() {
+        String str = String.format("Year: %s, Group: %s, IndexId: %s, Grades: %s", super.toString(), year, group, indexId);
+        for (Grade grade : grades) {
+            str = str + grade + "\r\n";
+        }
+        return str + "\r\n";
+    }
+
+    public void details() {
+        System.out.println(toString());
+    }
+
+    public void addGrade(String subjectName, double value, Date date) {
+        Grade oceny = new Grade(subjectName, value, date);
+        grades.add(oceny);
+    }
+
+    //dobieramy się z funkcji wyżej, która stworzyła nowy obiekt? 
+    public void addGrade(Grade oceny) {
+        addGrade(oceny.getSubjectName(), oceny.getValue(), oceny.getDate());
+    }
+
+    public void displayGrades() {
+        String str = String.format("Grades: %s \r\n");
+        for (Grade oceny : this.grades) {
+            str = str + oceny + "\r\n";
+        }
+        System.out.println("str");
+    }
+
+    public void displayGrades(String subjectName) {
+    }
+
+    public void deleteGrade(String subjectName, double value, Date date) {
+        Grade przypisanie = null;
+        for (Grade oceny : this.grades) {
+            if (subjectName.equals(oceny.getSubjectName()) && value == oceny.getValue() && date.equals(oceny.getDate())) {
+                przypisanie = oceny;
+            }
+        }
+        if (przypisanie != null) {
+            grades.remove(przypisanie);
+        } else {
+            System.out.println("Ni ma czego usunac");
+        }
+    }
+
+    public void deleteGrade(Grade grade) {
+        deleteGrade(grade.getSubjectName(), grade.getValue(), grade.getDate());
+    }
+
+    public void deleteGrades(String subjectName) {
+        for (int i = 0; i < grades.size(); i++) {
+            if (subjectName == grades.get(i).getSubjectName()) {
+                grades.remove(i);
+            }
+
+        }
+    }
+
+    public void deleteGrades() {
+
+        grades.clear();
+    }
+}//KONIEC KLASY STUDENT
+
+package lab2;
+
+import java.util.Date;
+
+public abstract class Player extends Person {
+    protected String position; 
+    protected String club; 
+    protected int scoredGoals; 
+
+    public Player() {
+        super();
+        this.position = "brak";
+        this.club = "brak";
+        this.scoredGoals = 0;
+    }
+
+    public Player(String firstName, String lastName, Date dateOfBirth, String position, String club, int scoredGoals) {
+        super(firstName, lastName, dateOfBirth);
+        this.position = position;
+        this.club = club;
+        this.scoredGoals = scoredGoals;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getClub() {
+        return club;
+    }
+
+    public void setClub(String club) {
+        this.club = club;
+    }
+
+    public int getScoredGoals() {
+        return scoredGoals;
+    }
+
+    public void setScoredGoals(int scoredGoals) {
+        this.scoredGoals = scoredGoals;
+    }
+
+    @Override
+    public String toString() {
+        String str= String.format("Position: %s, Club: %s, ScoredGoals: %s ", super.toString(),position, club, scoredGoals);
+        return str;
+    }
+    
+    public void details() {
+        System.out.println(toString());
+    }
+    
+    public void ScoreGoal(){
+    this.scoredGoals = scoredGoals;}
+}
+
+package lab2;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Person {
+
+    protected String firstName;
+    protected String lastName;
+    protected Date dateOfBirth;
+
+    public Person() {
+        this.dateOfBirth = new Date();
+        this.firstName = "brak";
+        this.lastName = "brak";
+    }
+
+    public Person(String firstName, String lastName, Date dateOfBirth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    @Override
+    public String toString() {
+        Format formatter = new SimpleDateFormat("yyy-MM-dd");
+        String str = String.format("First name: %s, Last Name: %s, Date of Birth: %s", firstName, lastName, formatter.format(dateOfBirth));
+        return str;
+    }
+
+    public void details() {
+        System.out.println(toString());
+    }
+
+}//KONIEC KLASY PERSON
+
+package lab2;
+
+import java.util.Date;
+
+public class HandballPlayer extends Player {
+
+    public HandballPlayer(String firstName, String lastName, Date dateOfBirth, String position, String club, int scoredGoals) {
+        super(firstName, lastName, dateOfBirth, position, club, scoredGoals);
+    }
+    
+    public void ScoreGoal(){
+    this.scoredGoals = scoredGoals;}
+}// KONIEC KLASY
+
+
+package lab2;
+
+import java.util.Date;
+
+
+public class FootballPlayer extends Player{
+
+
+    
+    public FootballPlayer(String firstName, String lastName, Date dateOfBirth, String position, String club, int scoredGoals) {
+        super(firstName, lastName, dateOfBirth, position, club, scoredGoals);
+    }
+    
+    public void ScoreGoal(){
+    this.scoredGoals = scoredGoals;}
+    
+}//KONIEC KLASY
+
+package lab2;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Grade {
+
+    private String subjectName;
+    private double value;
+    private Date date;
+    
+
+    public Grade() {
+        this.subjectName = "brak";
+        this.date = new Date();
+        this.value = 0;
+    }
+
+    public Grade(String subjectName, double value, Date date ) {
+        this.subjectName = subjectName;
+        this.date = date;
+        this.value = value;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        Format formatter = new SimpleDateFormat("yyy-MM-dd");
+        String str = String.format("Subject name: %s, Value: %s, Data: %s", subjectName, value, formatter.format(date));
+        return str;
+    }
+
+    public void details() {
+        System.out.println("toString()");
+    }
+
+}//KONIEC KLASY GRADE
+
+package lab2;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+    
+public class Lab2 {
+
+   
+    public static void main(String[] args)throws ParseException {
+
+ SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+ Person person1 = new Person("Adam", "Miś", sdf.parse("21/12/1990"));
+ Person person2 = new Student("Michał", "Kot", sdf.parse("15/01/1970"), 3, 5, 12345);
+ Person person3 = new FootballPlayer("Mateusz", "Żbik", sdf.parse("11/08/1986"), "striker", "FCBarcelona", 10);
+ person1.details();
+ person2.details();
+ person3.details();
+ Student student = new Student("Krzysztof", "Jeż", sdf.parse("29/12/1989"), 2, 5, 54321);
+ Player footballer = new HandballPlayer("Piotr", "Kos", sdf.parse("14/09/1984"), "striker", "FCPolitechnika", 2);
+ student.details();
+ footballer.details();
+ System.out.println("+=++++++++++++++++++++++++++++++++++++++++++++++");
+ ((Student) person2).addGrade("PO", 5.0D, sdf.parse("20/02/2011"));
+ ((Student) person2).addGrade("Bazy Danych", 5.0D, sdf.parse("22/04/2012"));
+ person2.details();  
+ Grade grade = new Grade("Bazy Danych", 5.0D, sdf.parse("01/05/2011"));
+ student.addGrade(grade);
+ student.addGrade("AWWW", 5.0D, sdf.parse("11/04/2013"));
+ student.addGrade("AWWW", 4.5D, sdf.parse("05/07/2009"));
+ student.details();
+ student.deleteGrade("AWWW", 4.5D, sdf.parse("05/07/2009"));
+ student.details();
+ student.deleteGrades("AWWW");
+ student.details();
+    }
+}
+
